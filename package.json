@@ -1,0 +1,35 @@
+{
+  "name": "nouveauprojetcypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "report": "node report/report.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^24.0.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
+    "@cypress/xpath": "^2.0.3",
+    "cypress": "^15.12.0",
+    "cypress-xpath": "^2.0.1",
+    "esbuild": "^0.27.4",
+    "multiple-cucumber-html-reporter": "^3.10.0"
+  },
+
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": [
+      "cypress/e2e/step_definitions/**/*.{js,ts}",
+      "cypress/support/step_definitions/**/*.{js,ts}"
+    ],
+    "json": {
+      "enabled": true,
+      "output": "cypress/cucumber-json/results.json"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+    "login": {
+        "url":"https://automationexercise.com/login",
+        "urlPageLogin": "https://automationexercise.com/login",
+        "Email": "input[data-qa='login-email']",
+        "loginPassword":"input[data-qa='login-password']",
+        "signupButton": "button[data-qa='login-button']"
+    }
+}

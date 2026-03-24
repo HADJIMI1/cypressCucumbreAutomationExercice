@@ -1,0 +1,6 @@
+node_modules/
+videos/
+cypress/cucumber-json/
+cypress/cucumber-report/
+report/
+*.log
