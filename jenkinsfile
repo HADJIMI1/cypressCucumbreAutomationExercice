@@ -1,0 +1,58 @@
+
+salim hadjimi <salimhadjimi10@gmail.com>
+15:11 (il y a 0 minute)
+À moi
+
+pipeline {
+    agent any
+
+    parameters {
+        // Choix du navigateur (Chrome par défaut)
+        choice(name: 'BROWSER', choices: ['chrome', 'edge', 'electron', 'firefox'], description: 'Navigateur pour les tests')
+        
+        // Choix des fichiers .feature (Tous par défaut)
+        string(name: 'SPEC', defaultValue: 'cypress/e2e/features/*.feature', description: 'Chemin des fichiers Cucumber')
+    }
+
+    stages {
+        stage('Nettoyage & Setup') {
+            steps {
+                echo "Nettoyage du dossier de travail..."
+                deleteDir()
+                checkout scm
+            }
+        }
+
+        stage('Installation') {
+            steps {
+                echo "Installation des dépendances Node.js..."
+                // Utilisation de 'bat' car tu es sous Windows
+                bat "npm install"
+            }
+        }
+
+        stage('Tests Cypress Cucumber') {
+            steps {
+                echo "Exécution des tests sur ${params.BROWSER}..."
+                // On lance Cypress avec les paramètres choisis dans l'interface Jenkins
+                bat "npx cypress run --browser ${params.BROWSER} --spec ${params.SPEC}"
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Génération des rapports..."
+            
+            // 1. Archiver les preuves vidéos et screenshots
+            archiveArtifacts artifacts: 'cypress/videos/**/*.mp4, cypress/screenshots/**/*.png', allowEmptyArchive: true
+            
+            // 2. Publier le rapport Cucumber (nécessite le plugin 'Cucumber reports' dans Jenkins)
+            // Si le plugin n'est pas là, cette étape affichera une erreur mais tes tests auront tourné !
+            cucumber buildStatus: 'null', 
+                     fileIncludePattern: '**/*.json', 
+                     jsonReportDirectory: 'cypress/reports', 
+                     sortingMethod: 'ALPHABETICAL'
+        }
+    }
+}
